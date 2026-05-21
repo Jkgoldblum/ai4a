@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI4A — AI for Ajit</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --jnj-red: #CC0000;
+    --jnj-red-dark: #990000;
+    --jnj-red-light: #ff4444;
+    --black: #0a0a0a;
+    --gray-900: #111111;
+    --gray-800: #1a1a1a;
+    --gray-700: #2a2a2a;
+    --gray-200: #e8e8e8;
+    --gray-100: #f4f4f4;
+    --gray-50: #fafafa;
+    --white: #ffffff;
+    --success: #16a34a;
+    --success-light: #dcfce7;
+    --muted: #9ca3af;
+    --locked-bg: #f8f8f8;
+    --locked-border: #e0e0e0;
+    --locked-text: #aaaaaa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-50);
+    color: var(--black);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--black);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(204,0,0,0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 30%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(204,0,0,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 64px 40px 56px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(204,0,0,0.15);
+    border: 1px solid rgba(204,0,0,0.3);
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--jnj-red-light);
+    margin-bottom: 24px;
+  }
+
+  .hero-eyebrow span {
+    width: 6px; height: 6px;
+    background: var(--jnj-red);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 10vw, 120px);
+    letter-spacing: 0.02em;
+    color: var(--white);
+    line-height: 0.9;
+    margin-bottom: 8px;
+  }
+
+  .hero-title span {
+    color: var(--jnj-red);
+  }
+
+  .hero-subtitle {
+    font-size: 15px;
+    color: rgba(255,255,255,0.6);
+    max-width: 620px;
+    margin-top: 20px;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  .hero-subtitle strong {
+    color: rgba(255,255,255,0.9);
+    font-weight: 500;
+  }
+
+  /* ── PHASE NAV ── */
+  .phase-nav {
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+
+  .phase-nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .phase-tab {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 24px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .phase-tab:hover { color: var(--black); }
+
+  .phase-tab.active {
+    color: var(--jnj-red);
+    border-bottom-color: var(--jnj-red);
+  }
+
+  .phase-tab.locked {
+    cursor: default;
+    opacity: 0.5;
+  }
+
+  .phase-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 20px;
+    background: var(--gray-100);
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  .phase-tab.active .phase-badge {
+    background: rgba(204,0,0,0.1);
+    color: var(--jnj-red);
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+  }
+
+  /* ── PHASE SECTION ── */
+  .phase-section {
+    padding-top: 56px;
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  .phase-header-left {}
+
+  .phase-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    color: var(--jnj-red);
+    margin-bottom: 6px;
+  }
+
+  .phase-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    letter-spacing: 0.02em;
+    color: var(--black);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+
+  .phase-desc {
+    font-size: 14px;
+    color: #555;
+    max-width: 640px;
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-widget {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 20px 24px;
+    min-width: 220px;
+    flex-shrink: 0;
+  }
+
+  .progress-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .progress-numbers {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+
+  .progress-count {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--black);
+    line-height: 1;
+  }
+
+  .progress-total {
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .progress-pct {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--jnj-red);
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .progress-bar-track {
+    height: 6px;
+    background: var(--gray-100);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--jnj-red-dark), var(--jnj-red));
+    border-radius: 3px;
+    transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+  }
+
+  /* ── TRAINING CARDS ── */
+  .training-group {
+    margin-bottom: 40px;
+  }
+
+  .group-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .group-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gray-200);
+  }
+
+  .training-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 12px;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .training-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--jnj-red);
+    border-radius: 3px 0 0 3px;
+    transition: width 0.2s;
+  }
+
+  .training-card:hover {
+    border-color: rgba(204,0,0,0.25);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    transform: translateY(-1px);
+  }
+
+  .training-card:hover::before {
+    width: 4px;
+  }
+
+  .training-card.completed {
+    background: #fafffe;
+    border-color: rgba(22,163,74,0.2);
+    opacity: 0.75;
+  }
+
+  .training-card.completed::before {
+    background: var(--success);
+  }
+
+  .training-card.optional::before {
+    background: var(--gray-200);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .card-left { flex: 1; }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .card-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .optional-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--gray-100);
+    color: var(--muted);
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  .card-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--black);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+
+  .training-card.completed .card-title {
+    text-decoration: line-through;
+    color: var(--muted);
+  }
+
+  .card-desc {
+    font-size: 13.5px;
+    color: #666;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .card-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  /* ── CHECKBOX ── */
+  .check-btn {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--gray-200);
+    background: var(--white);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .check-btn:hover {
+    border-color: var(--jnj-red);
+    background: rgba(204,0,0,0.05);
+  }
+
+  .check-btn.checked {
+    border-color: var(--success);
+    background: var(--success);
+  }
+
+  .check-btn svg {
+    display: none;
+  }
+
+  .check-btn.checked svg {
+    display: block;
+  }
+
+  /* ── LAUNCH BUTTON ── */
+  .launch-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--jnj-red);
+    text-decoration: none;
+    padding: 7px 14px;
+    border: 1.5px solid var(--jnj-red);
+    border-radius: 6px;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .launch-btn:hover {
+    background: var(--jnj-red);
+    color: var(--white);
+  }
+
+  .launch-btn svg {
+    width: 11px; height: 11px;
+    flex-shrink: 0;
+  }
+
+  .training-card.completed .launch-btn {
+    opacity: 0.5;
+  }
+
+  /* ── SUBMODULES (AI Academy) ── */
+  .submodules {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--gray-100);
+  }
+
+  .submodule-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .submodule-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-100);
+    transition: opacity 0.2s;
+  }
+
+  .submodule-item:last-child { border-bottom: none; }
+
+  .submodule-item.completed { opacity: 0.55; }
+
+  .sub-check {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--gray-200);
+    background: var(--white);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all 0.2s;
+  }
+
+  .sub-check:hover {
+    border-color: var(--jnj-red);
+  }
+
+  .sub-check.checked {
+    border-color: var(--success);
+    background: var(--success);
+  }
+
+  .sub-check svg { display: none; }
+  .sub-check.checked svg { display: block; }
+
+  .submodule-text {}
+
+  .submodule-name {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--black);
+    margin-bottom: 2px;
+  }
+
+  .submodule-item.completed .submodule-name {
+    text-decoration: line-through;
+    color: var(--muted);
+  }
+
+  .submodule-desc {
+    font-size: 12.5px;
+    color: #888;
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  /* ── CREDENTIALS BOX ── */
+  .creds-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 12.5px;
+    color: #666;
+  }
+
+  .creds-box svg {
+    flex-shrink: 0;
+    color: var(--muted);
+  }
+
+  /* ── LOCKED PHASE ── */
+  .phase-section.locked-phase {
+    opacity: 1;
+  }
+
+  .locked-card {
+    background: var(--locked-bg);
+    border: 1px dashed var(--locked-border);
+    border-radius: 12px;
+    padding: 32px 28px;
+    text-align: center;
+  }
+
+  .locked-icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+  }
+
+  .locked-icon svg {
+    color: var(--locked-text);
+  }
+
+  .locked-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--locked-text);
+    margin-bottom: 8px;
+  }
+
+  .locked-detail {
+    font-size: 13px;
+    color: #bbb;
+    line-height: 1.6;
+    max-width: 400px;
+    margin: 0 auto 16px;
+    font-weight: 300;
+  }
+
+  .prereq-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(204,0,0,0.06);
+    border: 1px solid rgba(204,0,0,0.15);
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--jnj-red);
+  }
+
+  /* ── DO SECTION DETAILS ── */
+  .do-detail {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 13.5px;
+    color: #888;
+    font-weight: 300;
+  }
+
+  .do-detail:last-child { border-bottom: none; }
+
+  .do-detail-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    height: 1px;
+    background: var(--gray-200);
+    margin: 56px 0 0;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--black);
+    padding: 28px 40px;
+    text-align: center;
+  }
+
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--white);
+    letter-spacing: 0.05em;
+  }
+
+  .footer-logo span { color: var(--jnj-red); }
+
+  .footer-text {
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .hero-inner, .main { padding-left: 20px; padding-right: 20px; }
+    .phase-header { flex-direction: column; }
+    .progress-widget { min-width: unset; width: 100%; }
+    .card-top { flex-direction: column; }
+    .card-right { flex-direction: row; align-items: center; }
+    .phase-nav-inner { padding: 0 20px; overflow-x: auto; }
+    .footer-inner { flex-direction: column; gap: 8px; }
+  }
+
+  /* ── ANIMATE IN ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .training-card {
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .training-card:nth-child(1) { animation-delay: 0.05s; }
+  .training-card:nth-child(2) { animation-delay: 0.1s; }
+  .training-card:nth-child(3) { animation-delay: 0.15s; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <span></span>
+      J&J Innovative Medicine
+    </div>
+    <div class="hero-title">AI<span>4</span>A</div>
+    <p class="hero-subtitle">
+      <strong>Ajit,</strong> welcome to your personalized AI experience to take you from foundational fluency to active leadership. AI4A features progressive modules to increase your personal AI fluency and position you to lead with curiosity and conviction. By the capstone, you will be a credible, visible catalyst for AI adoption across the commercial organization.
+    </p>
+  </div>
+</header>
+
+<!-- PHASE NAV -->
+<nav class="phase-nav">
+  <div class="phase-nav-inner">
+    <a href="#module101" class="phase-tab active">
+      Module 101
+      <span class="phase-badge">LEARN</span>
+    </a>
+    <a href="#module201" class="phase-tab locked">
+      Module 201
+      <span class="phase-badge">DO</span>
+    </a>
+    <a href="#module301" class="phase-tab locked">
+      Module 301
+      <span class="phase-badge">TEACH</span>
+    </a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ── MODULE 101: LEARN ── -->
+  <section class="phase-section" id="module101">
+    <div class="phase-header">
+      <div class="phase-header-left">
+        <div class="phase-number">MODULE 101 — LEARN</div>
+        <div class="phase-title">The Kickoff</div>
+        <p class="phase-desc">Build fluency in AI concepts and nomenclature, the enterprise AI agenda, and commercial use cases reshaping the industry so that you show up as an informed leader who asks the right questions and makes fast, sharp decisions.</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:24px; padding-top:24px; border-top:1px solid var(--gray-200);">
+          <div>
+            <div style="font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--jnj-red); margin-bottom:14px;">Objectives</div>
+            <ul style="list-style:none; display:flex; flex-direction:column; gap:10px;">
+              <li style="display:flex; gap:10px; font-size:13px; color:#666; font-weight:300; line-height:1.55;">
+                <span style="width:6px; height:6px; border-radius:50%; background:var(--gray-200); flex-shrink:0; margin-top:6px;"></span>
+                Build fluency in AI concepts, nomenclature, and the enterprise AI agenda to show up as an informed leader
+              </li>
+              <li style="display:flex; gap:10px; font-size:13px; color:#666; font-weight:300; line-height:1.55;">
+                <span style="width:6px; height:6px; border-radius:50%; background:var(--gray-200); flex-shrink:0; margin-top:6px;"></span>
+                Understand the role of trust in scaling AI adoption and what responsible deployment looks like in a commercial organization
+              </li>
+              <li style="display:flex; gap:10px; font-size:13px; color:#666; font-weight:300; line-height:1.55;">
+                <span style="width:6px; height:6px; border-radius:50%; background:var(--gray-200); flex-shrink:0; margin-top:6px;"></span>
+                Broaden your understanding of generative and agentic AI use cases advancing across MedTech and the commercial functions
+              </li>
+              <li style="display:flex; gap:10px; font-size:13px; color:#666; font-weight:300; line-height:1.55;">
+                <span style="width:6px; height:6px; border-radius:50%; background:var(--gray-200); flex-shrink:0; margin-top:6px;"></span>
+                Develop the ability to speak credibly to AI use cases reshaping the life sciences industry
+              </li>
+            </ul>
+          </div>
+          <div>
+            <div style="font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--jnj-red); margin-bottom:14px;">Module Components</div>
+            <ul style="list-style:none; display:flex; flex-direction:column; gap:10px;">
+              <li style="display:flex; gap:10px; font-size:13px; color:#666; font-weight:300; line-height:1.55;">
+                <span style="width:6px; height:6px; border-radius:50%; background:var(--gray-200); flex-shrink:0; margin-top:6px;"></span>
+                <span><strong style="color:#444; font-weight:500;">Applied AI Fluency for All</strong> — 8 self-paced modules: AI fundamentals, productivity, prompt engineering, ethics, problem solving, agentic AI</span>
+              </li>
+              <li style="display:flex; gap:10px; font-size:13px; color:#666; font-weight:300; line-height:1.55;">
+                <span style="width:6px; height:6px; border-radius:50%; background:var(--gray-200); flex-shrink:0; margin-top:6px;"></span>
+                <span><strong style="color:#444; font-weight:500;">Claude 101</strong> — everyday work tasks, core features, practical application</span>
+              </li>
+              <li style="display:flex; gap:10px; font-size:13px; color:#666; font-weight:300; line-height:1.55;">
+                <span style="width:6px; height:6px; border-radius:50%; background:var(--gray-200); flex-shrink:0; margin-top:6px;"></span>
+                <span><strong style="color:#444; font-weight:500;">Claude Code in Action</strong> <em style="color:#999;">— Optional</em> — walkthrough of how using Claude Code can accelerate your development workflow</span>
+              </li>
+              <li style="display:flex; gap:10px; font-size:13px; color:#666; font-weight:300; line-height:1.55;">
+                <span style="width:6px; height:6px; border-radius:50%; background:var(--gray-200); flex-shrink:0; margin-top:6px;"></span>
+                <span><strong style="color:#444; font-weight:500;">State of AI in Life Sciences & Health Care</strong> — Deloitte March 2026 — industry trends and commercial implications</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="margin-top:20px; padding-top:16px; border-top:1px solid var(--gray-200); font-size:12px; color:#888;">
+          <span style="color:var(--jnj-red); font-weight:600; margin-right:8px;">WHEN & HOW</span>
+          Self-guided trainings and readings to be completed in advance of "Do" session on June 11th
+        </div>
+      </div>
+      <div class="progress-widget">
+        <div class="progress-label">Your Progress</div>
+        <div class="progress-numbers">
+          <div class="progress-count" id="prog-count">0</div>
+          <div class="progress-total" id="prog-total">/ 10 complete</div>
+          <div class="progress-pct" id="prog-pct">0%</div>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="prog-bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GROUP 1: RECOMMENDED TRAININGS -->
+    <div class="training-group">
+      <div class="group-label">Your self-paced learning journey starts here.</div>
+
+      <!-- CARD 1: Applied AI Fluency for All -->
+      <div class="training-card" id="card-academy">
+        <div class="card-top">
+          <div class="card-left">
+            <div class="card-meta">
+              <span class="card-number">01</span>
+            </div>
+            <div class="card-title">Applied AI Fluency for All</div>
+            <div class="card-desc">A series of 8 short, self-paced courses that explores AI concepts including AI fundamentals, AI-powered productivity, prompt engineering, and more.</div>
+          </div>
+          <div class="card-right">
+            <a href="https://aiacademy.docebosaas.com/pages/19/home" target="_blank" class="launch-btn">
+              Access Course
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 6h10M7 2l4 4-4 4"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="creds-box">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          For login credentials, please refer to the <strong style="margin-left:4px;">AI4A Module 101 – Learn email</strong>.
+        </div>
+
+        <div class="submodules">
+          <div class="submodule-label">8 Modules — mark each complete as you go</div>
+
+          <div class="submodule-item" id="sub-0">
+            <div class="sub-check" onclick="toggleSub(0)" title="Mark complete">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="1.5,6 5,9.5 10.5,2.5"/></svg>
+            </div>
+            <div class="submodule-text">
+              <div class="submodule-name">Welcome & Orientation</div>
+              <div class="submodule-desc">An introduction to the AI Academy — what to expect, how to navigate, and how to get the most out of the program.</div>
+            </div>
+          </div>
+
+          <div class="submodule-item" id="sub-1">
+            <div class="sub-check" onclick="toggleSub(1)" title="Mark complete">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="1.5,6 5,9.5 10.5,2.5"/></svg>
+            </div>
+            <div class="submodule-text">
+              <div class="submodule-name">AI Fundamentals</div>
+              <div class="submodule-desc">Learn about the fundamentals of AI and explore the benefits and challenges of AI in enterprise contexts.</div>
+            </div>
+          </div>
+
+          <div class="submodule-item" id="sub-2">
+            <div class="sub-check" onclick="toggleSub(2)" title="Mark complete">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="1.5,6 5,9.5 10.5,2.5"/></svg>
+            </div>
+            <div class="submodule-text">
+              <div class="submodule-name">AI-Powered Productivity</div>
+              <div class="submodule-desc">Learn how to boost productivity through AI — practical techniques for integrating AI tools into your daily workflow.</div>
+            </div>
+          </div>
+
+          <div class="submodule-item" id="sub-3">
+            <div class="sub-check" onclick="toggleSub(3)" title="Mark complete">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="1.5,6 5,9.5 10.5,2.5"/></svg>
+            </div>
+            <div class="submodule-text">
+              <div class="submodule-name">Prompt Engineering Basics</div>
+              <div class="submodule-desc">Explore the concept of prompt engineering and its significance in AI — how to ask better questions to get better answers.</div>
+            </div>
+          </div>
+
+          <div class="submodule-item" id="sub-4">
+            <div class="sub-check" onclick="toggleSub(4)" title="Mark complete">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="1.5,6 5,9.5 10.5,2.5"/></svg>
+            </div>
+            <div class="submodule-text">
+              <div class="submodule-name">Technology, Trust & Ethics</div>
+              <div class="submodule-desc">Focus on the ethical considerations involved in using AI technologies — governance, transparency, and responsible use.</div>
+            </div>
+          </div>
+
+          <div class="submodule-item" id="sub-5">
+            <div class="sub-check" onclick="toggleSub(5)" title="Mark complete">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="1.5,6 5,9.5 10.5,2.5"/></svg>
+            </div>
+            <div class="submodule-text">
+              <div class="submodule-name">Problem Solving with AI</div>
+              <div class="submodule-desc">Learn about the role of AI in enhancing problem-solving capabilities across commercial and operational contexts.</div>
+            </div>
+          </div>
+
+          <div class="submodule-item" id="sub-6">
+            <div class="sub-check" onclick="toggleSub(6)" title="Mark complete">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="1.5,6 5,9.5 10.5,2.5"/></svg>
+            </div>
+            <div class="submodule-text">
+              <div class="submodule-name">Agentic AI Essentials</div>
+              <div class="submodule-desc">Understand what agentic AI is, its basic concepts, and practical business uses — the next frontier of AI automation.</div>
+            </div>
+          </div>
+
+          <div class="submodule-item" id="sub-7">
+            <div class="sub-check" onclick="toggleSub(7)" title="Mark complete">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="1.5,6 5,9.5 10.5,2.5"/></svg>
+            </div>
+            <div class="submodule-text">
+              <div class="submodule-name">Applied Agentic AI</div>
+              <div class="submodule-desc">Review risks and best practices for using AI tools responsibly — translating agentic AI concepts into real-world application.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CARD 2: Claude 101 -->
+      <div class="training-card" id="card-claude101">
+        <div class="card-top">
+          <div class="card-left">
+            <div class="card-meta">
+              <span class="card-number">02</span>
+            </div>
+            <div class="card-title">Claude 101</div>
+            <div class="card-desc">Learn how to use Claude for everyday work tasks, understand core features, and explore resources for more advanced learning on other topics.</div>
+          </div>
+          <div class="card-right">
+            <div class="check-btn" id="check-claude101" onclick="toggleCard('claude101')" title="Mark complete">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="1.5,6 5,9.5 10.5,2.5"/></svg>
+            </div>
+            <a href="https://anthropic.skilljar.com/claude-101" target="_blank" class="launch-btn">
+              Launch
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 6h10M7 2l4 4-4 4"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 3: Claude Code (Optional) -->
+      <div class="training-card optional" id="card-claudecode">
+        <div class="card-top">
+          <div class="card-left">
+            <div class="card-meta">
+              <span class="card-number">03</span>
+              <span class="optional-tag">Optional</span>
+            </div>
+            <div class="card-title">Claude Code in Action</div>
+            <div class="card-desc">This course offers a practical walkthrough of how using Claude Code can accelerate your development workflow — for when you're ready to go deeper.</div>
+          </div>
+          <div class="card-right">
+            <a href="https://anthropic.skilljar.com/claude-code-in-action" target="_blank" class="launch-btn">
+              Launch
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 6h10M7 2l4 4-4 4"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- GROUP 2: AI INDUSTRY TRENDS POV -->
+    <div class="training-group">
+      <div class="group-label">AI Industry Trends POV</div>
+
+      <!-- CARD 4: Deloitte LSHC Report -->
+      <div class="training-card" id="card-lshc">
+        <div class="card-top">
+          <div class="card-left">
+            <div class="card-meta">
+              <span class="card-number">04</span>
+            </div>
+            <div class="card-title">State of AI in Life Sciences & Health Care (March 2026)</div>
+            <div class="card-desc">Deloitte's latest industry trends report addressing AI adoption, enterprise implications, and commercial opportunity across the life sciences and health care sector — directly relevant to your role and agenda.</div>
+          </div>
+          <div class="card-right">
+            <div class="check-btn" id="check-lshc" onclick="toggleCard('lshc')" title="Mark complete">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="1.5,6 5,9.5 10.5,2.5"/></svg>
+            </div>
+            <a href="https://www.deloitte.com/content/dam/assets-zone3/us/en/docs/services/consulting/2026/StateofAI-LSHC.pdf" target="_blank" class="launch-btn">
+              Read Report
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 6h10M7 2l4 4-4 4"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- DIVIDER -->
+  <div class="section-divider"></div>
+
+  <!-- ── MODULE 201: DO ── -->
+  <section class="phase-section locked-phase" id="module201">
+    <div class="phase-header">
+      <div class="phase-header-left">
+        <div class="phase-number" style="color: var(--locked-text);">MODULE 201 — DO</div>
+        <div class="phase-title" style="color: var(--locked-text);">The Experimentation</div>
+        <p class="phase-desc" style="color: #bbb;">Move from knowing to doing by experimenting with prompts, workflow design, and agent builds in the context of real J&J issues in a low-stakes environment, so that you can lead AI adoption by showing instead of telling.</p>
+      </div>
+    </div>
+
+    <div class="locked-card" style="text-align:left;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+        <div class="locked-icon" style="margin:0; flex-shrink:0;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div>
+          <div class="locked-title" style="margin-bottom:2px;">Coming Soon</div>
+          <div style="font-size:12.5px; color:#bbb; font-weight:300;">June 11th · Deloitte Philadelphia Office</div>
+        </div>
+        <div style="margin-left:auto;">
+          <div class="prereq-banner">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Recommended: complete all of Module 101 before attending
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+        <div>
+          <div style="font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--jnj-red); margin-bottom:14px;">Objectives</div>
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:10px;">
+            <li style="display:flex; gap:10px; font-size:13px; color:#999; font-weight:300; line-height:1.55;">
+              <span style="width:6px; height:6px; border-radius:50%; background:var(--locked-border); flex-shrink:0; margin-top:6px;"></span>
+              Experience AI and leading-edge tools from across the external landscape
+            </li>
+            <li style="display:flex; gap:10px; font-size:13px; color:#999; font-weight:300; line-height:1.55;">
+              <span style="width:6px; height:6px; border-radius:50%; background:var(--locked-border); flex-shrink:0; margin-top:6px;"></span>
+              Dedicate time and brain space to working through progressively challenging use cases in a "digital playground"
+            </li>
+            <li style="display:flex; gap:10px; font-size:13px; color:#999; font-weight:300; line-height:1.55;">
+              <span style="width:6px; height:6px; border-radius:50%; background:var(--locked-border); flex-shrink:0; margin-top:6px;"></span>
+              Identify commitments to incorporate AI as an engrained feature of your day-to-day work
+            </li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--jnj-red); margin-bottom:14px;">Potential Module Components</div>
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:10px;">
+            <li style="display:flex; gap:10px; font-size:13px; color:#999; font-weight:300; line-height:1.55;">
+              <span style="width:6px; height:6px; border-radius:50%; background:var(--locked-border); flex-shrink:0; margin-top:6px;"></span>
+              <span><strong style="color:#aaa; font-weight:500;">Live demo sessions</strong> to interact with frontier models across use cases (GPT-4o, Claude, Gemini)</span>
+            </li>
+            <li style="display:flex; gap:10px; font-size:13px; color:#999; font-weight:300; line-height:1.55;">
+              <span style="width:6px; height:6px; border-radius:50%; background:var(--locked-border); flex-shrink:0; margin-top:6px;"></span>
+              <span><strong style="color:#aaa; font-weight:500;">Structured prompt engineering</strong> to maximize Copilot and other tools</span>
+            </li>
+            <li style="display:flex; gap:10px; font-size:13px; color:#999; font-weight:300; line-height:1.55;">
+              <span style="width:6px; height:6px; border-radius:50%; background:var(--locked-border); flex-shrink:0; margin-top:6px;"></span>
+              <span><strong style="color:#aaa; font-weight:500;">Personal 30-day AI tool challenge</strong> — create a plan to work through one new use case per week</span>
+            </li>
+            <li style="display:flex; gap:10px; font-size:13px; color:#999; font-weight:300; line-height:1.55;">
+              <span style="width:6px; height:6px; border-radius:50%; background:var(--locked-border); flex-shrink:0; margin-top:6px;"></span>
+              <span><strong style="color:#aaa; font-weight:500;">Time to practice</strong> writing prompts, designing workflows, and creating agents to address opportunities for you personally and for IM as a sector</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top:20px; padding-top:16px; border-top:1px solid var(--locked-border); font-size:12px; color:#bbb;">
+        <span style="color:var(--jnj-red); font-weight:600; margin-right:8px;">WHEN & HOW</span>
+        Live kick-off on June 11th with AI technical leaders, followed by monthly check-ins
+      </div>
+    </div>
+  </section>
+
+  <!-- DIVIDER -->
+  <div class="section-divider"></div>
+
+  <!-- ── MODULE 301: TEACH ── -->
+  <section class="phase-section locked-phase" id="module301">
+    <div class="phase-header">
+      <div class="phase-header-left">
+        <div class="phase-number" style="color: var(--locked-text);">MODULE 301 — TEACH</div>
+        <div class="phase-title" style="color: var(--locked-text);">The Capstone</div>
+        <p class="phase-desc" style="color: #bbb;">Model and multiply AI adoption by equipping your team to think and act with J&J's AI tools, elevating conversations with AI-enhanced content, and charging senior leaders with the mission of making AI a feature of IM culture.</p>
+      </div>
+    </div>
+
+    <div class="locked-card" style="text-align:left;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+        <div class="locked-icon" style="margin:0; flex-shrink:0;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div>
+          <div class="locked-title" style="margin-bottom:2px;">Coming in September 2026</div>
+          <div style="font-size:12.5px; color:#bbb; font-weight:300;">Additional details to come</div>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+        <div>
+          <div style="font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--jnj-red); margin-bottom:14px;">Objectives</div>
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:10px;">
+            <li style="display:flex; gap:10px; font-size:13px; color:#999; font-weight:300; line-height:1.55;">
+              <span style="width:6px; height:6px; border-radius:50%; background:var(--locked-border); flex-shrink:0; margin-top:6px;"></span>
+              Communicate a clear, human-centered AI narrative to the organization
+            </li>
+            <li style="display:flex; gap:10px; font-size:13px; color:#999; font-weight:300; line-height:1.55;">
+              <span style="width:6px; height:6px; border-radius:50%; background:var(--locked-border); flex-shrink:0; margin-top:6px;"></span>
+              Teach AI fundamentals to your peers, leadership team, and others across IM to raise the bar for AI use across the organization
+            </li>
+            <li style="display:flex; gap:10px; font-size:13px; color:#999; font-weight:300; line-height:1.55;">
+              <span style="width:6px; height:6px; border-radius:50%; background:var(--locked-border); flex-shrink:0; margin-top:6px;"></span>
+              Leverage your fluency as a force multiplier by "setting the tone from the top" that experimentation is expected and encouraged
+            </li>
+            <li style="display:flex; gap:10px; font-size:13px; color:#999; font-weight:300; line-height:1.55;">
+              <span style="width:6px; height:6px; border-radius:50%; background:var(--locked-border); flex-shrink:0; margin-top:6px;"></span>
+              Champion resources to support sustained AI adoption
+            </li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--jnj-red); margin-bottom:14px;">Potential Module Components</div>
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:10px;">
+            <li style="display:flex; gap:10px; font-size:13px; color:#999; font-weight:300; line-height:1.55;">
+              <span style="width:6px; height:6px; border-radius:50%; background:var(--locked-border); flex-shrink:0; margin-top:6px;"></span>
+              <span><strong style="color:#aaa; font-weight:500;">Internal and external AI narrative shaping</strong> — talking points for speaking to your AI agenda, in partnership with J&J communications partners</span>
+            </li>
+            <li style="display:flex; gap:10px; font-size:13px; color:#999; font-weight:300; line-height:1.55;">
+              <span style="width:6px; height:6px; border-radius:50%; background:var(--locked-border); flex-shrink:0; margin-top:6px;"></span>
+              <span><strong style="color:#aaa; font-weight:500;">Preparation to showcase your AI use within your day-to-day</strong> — leveraging existing meetings and events</span>
+            </li>
+            <li style="display:flex; gap:10px; font-size:13px; color:#999; font-weight:300; line-height:1.55;">
+              <span style="width:6px; height:6px; border-radius:50%; background:var(--locked-border); flex-shrink:0; margin-top:6px;"></span>
+              <span><strong style="color:#aaa; font-weight:500;">Delivery of dedicated leader AI fluency learning sessions</strong> — one day, or multiple shorter sessions across the span of a few weeks</span>
+            </li>
+            <li style="display:flex; gap:10px; font-size:13px; color:#999; font-weight:300; line-height:1.55;">
+              <span style="width:6px; height:6px; border-radius:50%; background:var(--locked-border); flex-shrink:0; margin-top:6px;"></span>
+              <span><strong style="color:#aaa; font-weight:500;">Creation of your personal "AI toolkit"</strong> to share with the leadership team — tips, prompts, guidelines</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top:20px; padding-top:16px; border-top:1px solid var(--locked-border); font-size:12px; color:#bbb;">
+        <span style="color:var(--jnj-red); font-weight:600; margin-right:8px;">WHEN & HOW</span>
+        Live demonstrations, culminating in an October leadership experience at Deloitte University
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">AI<span>4</span>A</div>
+  </div>
+</footer>
+
+<script>
+  // ── CONSTANTS ──
+  const TOTAL_TRACKED = 10; // 8 submodules + claude101 + lshc
+  const STORAGE_KEY = 'ai4a_progress_v1';
+
+  // ── STATE ──
+  let state = {
+    subs: Array(8).fill(false),
+    claude101: false,
+    lshc: false
+  };
+
+  // ── LOAD FROM LOCAL STORAGE ──
+  function loadState() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) state = JSON.parse(saved);
+    } catch(e) {}
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch(e) {}
+  }
+
+  // ── RENDER ──
+  function render() {
+    // Submodules
+    state.subs.forEach((done, i) => {
+      const item = document.getElementById('sub-' + i);
+      const check = item.querySelector('.sub-check');
+      if (done) {
+        item.classList.add('completed');
+        check.classList.add('checked');
+      } else {
+        item.classList.remove('completed');
+        check.classList.remove('checked');
+      }
+    });
+
+    // Academy parent card — complete if all 8 done
+    const academyDone = state.subs.every(Boolean);
+    const academyCard = document.getElementById('card-academy');
+    if (academyDone) {
+      academyCard.classList.add('completed');
+    } else {
+      academyCard.classList.remove('completed');
+    }
+
+    // Claude 101
+    const c101Card = document.getElementById('card-claude101');
+    const c101Check = document.getElementById('check-claude101');
+    if (state.claude101) {
+      c101Card.classList.add('completed');
+      c101Check.classList.add('checked');
+    } else {
+      c101Card.classList.remove('completed');
+      c101Check.classList.remove('checked');
+    }
+
+    // LSHC
+    const lshcCard = document.getElementById('card-lshc');
+    const lshcCheck = document.getElementById('check-lshc');
+    if (state.lshc) {
+      lshcCard.classList.add('completed');
+      lshcCheck.classList.add('checked');
+    } else {
+      lshcCard.classList.remove('completed');
+      lshcCheck.classList.remove('checked');
+    }
+
+    // Progress
+    const subsDone = state.subs.filter(Boolean).length;
+    const cardsDone = (state.claude101 ? 1 : 0) + (state.lshc ? 1 : 0);
+    const total = subsDone + cardsDone;
+    const pct = Math.round((total / TOTAL_TRACKED) * 100);
+
+    document.getElementById('prog-count').textContent = total;
+    document.getElementById('prog-total').textContent = '/ ' + TOTAL_TRACKED + ' complete';
+    document.getElementById('prog-pct').textContent = pct + '%';
+    document.getElementById('prog-bar').style.width = pct + '%';
+  }
+
+  // ── TOGGLE SUBMODULE ──
+  function toggleSub(i) {
+    state.subs[i] = !state.subs[i];
+    saveState();
+    render();
+  }
+
+  // ── TOGGLE CARD ──
+  function toggleCard(key) {
+    state[key] = !state[key];
+    saveState();
+    render();
+  }
+
+  // ── INIT ──
+  loadState();
+  render();
+</script>
+</body>
+</html>
